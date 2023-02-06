@@ -4,7 +4,25 @@ subtitle: "Analytical Toolbox for Ecologists and Evolutionary Biologists (PBC 47
 author: "Reed Clark Benkendorf<br>Northwestern University & The Chicago Botanic Garden<br>Southwest Conservation Corps & Bureau of the Land Management"
 date: "February 22, '23"
 output: ioslides_presentation
+bibliography: ../citations/citations.bib
 ---
+
+<style>
+
+slide.backdrop {
+  background: black;
+}
+body {
+  background-color: black;
+}
+h2 { 
+text-align: right;
+ color: #4E2A84;		
+}
+h3 { 
+ color: #3399ff;		
+}
+</style>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
@@ -26,7 +44,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ## objectives
 
 using a number of known occurrences, identify areas in space which have
-similar habitat which has the potential to support populations of the species of interest
+similar habitat which have the potential to support populations of the species of interest
 
 but, what about dispersal?
 
@@ -43,7 +61,7 @@ but, what about dispersal?
 
 - domain; spatial extent of study
     - administrative boundary (e.g. State, Forest Preserve)
-    - ecological model (e.g. **Omernik Ecoregions**, Major Land Resource Areas (mlra))
+    - ecological model (e.g. **Omernik Ecoregions**)
 - grain; scales in space and time
     - area at which process occurs (space)
     - **current and past climate** (time)
@@ -55,9 +73,10 @@ but, what about dispersal?
 
 - open source
     - **r**
-      - **sf** *vector data ala tidyverse*
-      - **terra** *fast raster data without headaches*
-      - **sdm** *full suite of modelling operations*
+      - **caret** *data partitioning* @kuhn2022caret
+      - **sf** *vector data ala tidyverse* @pebesma2018sf
+      - **terra** *fast raster data without headaches* @hijman2022terra
+      - **sdm** *full suite of modelling operations*  @naimi2016sdm
     - **grass gis** *many modules for creating predictors*
     - **qgis** *graphical user interface for visualization*
     
@@ -123,7 +142,17 @@ explicitly check for variation to save compute resources
 - solution:
   - run many models, synthesize the results
   
+  
 > *"we are stronger together than we are alone"* - Walter Payton
+
+
+<div class="notes">
+These are some example notes in *markdown* format.
+
+- List items can be included
+
+- Like this
+</div>
 
 ## ensembles pt II
 
@@ -131,7 +160,7 @@ explicitly check for variation to save compute resources
   - weak learners; many simple decision tree models are combined to a single output
     - bootstrap aggregation (**bagging**) e.g. *random forests*
       - many models run independent of each  
-    - **boosting** e.g. *boosted regression trees, Adaboost, xgboost*
+    - **boosting** e.g. *boosted regression trees*
       - many models run sequentially, focusing on correcting errors in the last iteration
       
   - *stacking* another form of combining many models
@@ -171,6 +200,9 @@ none, get a few observations, the more the merrier.
 train/test split (partition data)
 
 - no free lunch 
+  - no silver bullet machine learning algorithm; each is able to work better than 
+  others under diverse circumstances.
+  - try many types of models, select some that work for *your* application
 
 - commonly implemented:
   - random forest 
@@ -178,19 +210,29 @@ train/test split (partition data)
 
 ## evaluation
 
-- accuracy
-  - precision
-  - recall
-- area under the curve (AUC)
-  - 
+- accuracy: proportion of all predictions which are 
+  - sensitivity: probability of modelling giving a TRUE, when value is TRUE
+  - specificity: probability of modelling giving a FALSE, when value is FALSE
+- Area Under the ROC Curve (AUC)
 - Cohen's kappa 
   - unequal sample sizes, i.e. evaluate many models at once
 
 ## ensembles pt II
 
+- several r packages offer *stacking* of many models, based on your selection 
+of evaluation criteria to weigh them
+- the 'test' partition of your data are used to evaluate this final model
+
 ## predicting a model into space 
 
+- any model, based on values present in gridded (raster) data can be predicted onto a new raster surface
+- each covariate in the model, is generally a single raster layer
+- r packages, such as *terra*, do all the work for you
+- accordingly, species distribution models create a map as a product
+
 ## interpretation
+
+- this map has values of habitat suitability, based on your model. 
 
 ## tips and tricks
 
@@ -198,9 +240,30 @@ train/test split (partition data)
 
 ## conclusion
 
-## contact Info
+- species distribution models are very simple!
+- fun introduction to simple machine learning
+- represent a hypothesis of the probability of suitable habitat
+- new avenues (J-SDM's) can include mutualisms
+- stacked species (S-SDM's) distributions for predicting ecological assemblies
+
+## contact info
 
 - github/sagesteppe (preferred)
 - reedbenkendorf2021@u.northwestern.edu
+
+
+## some extra info 
+
+## modelling ensemble learning
+
+> __Ensemble learning__ utilizes many sets of trees, each tree being composed of many binary decisions, to create a single model. Each independent variable ( - or *feature*) may become a node on the tree - i.e. a location on the tree where a binary decision will move towards a predicted outcome. Each of the decision tree models which ensemble learning utilizes is a weak model, each of which may suffer due to high variance or bias, but which produce better outcomes than would be expected via chance. When ensembled these models generate a strong model, a model which should have more appropriately balanced variance and bias and predicts outcomes which are more strongly correlated with the expected values than the individual weak models. 
+
+## modelling random forest
+
+> *__Random Forest (RF)__* the training data are continually bootstrap re-sampled, in combination with random subsets of features, to create nodes which attempt to optimally predict a known outcome. A large number of trees are then aggregated, via the most common predictions, to generate a final classification prediction tree. Each individual prediction tree is generated independently of the others. 
+
+## modelling boosted regression trees
+
+> *__Boosted Regression Tree (BRT)__* (or Gradient Boosted tree) An initial tree is grown, and all other trees are derived sequentially from it, as each new tree is grown the errors in responses from the last tree are weighed more heavily so that the model focuses on selecting dependent variables which refine predictions. All response data and predictor variables are kept available to all trees.
 
 ## citations
