@@ -1,0 +1,206 @@
+---
+title: "Species Distribution Models (SDM's)"
+subtitle: "Analytical Toolbox for Ecologists and Evolutionary Biologists (PBC 470)"
+author: "Reed Clark Benkendorf<br>Northwestern University & The Chicago Botanic Garden<br>Southwest Conservation Corps & Bureau of the Land Management"
+date: "February 22, '23"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## talk overview
+
+- Applications  
+- Objectives
+- Methods
+- Interpretation
+
+##  applications - conservation  
+
+- aid in discovery of new populations of imperiled plants
+- aid in creation of reserves under climate change models
+- aid in predicting joint species distributions, i.e. obligate mutualisms 
+
+## objectives
+
+using a number of known occurrences, identify areas in space which have
+similar habitat which has the potential to support populations of the species of interest
+
+but, what about dispersal?
+
+## methods - overview
+
+- define spatial domain and grain
+- software environments
+- dependent variables
+- independent variables
+- modelling approaches
+- predicting a model into space
+
+## domain and grain 
+
+- domain; spatial extent of study
+    - administrative boundary (e.g. State, Forest Preserve)
+    - ecological model (e.g. **Omernik Ecoregions**, Major Land Resource Areas (mlra))
+- grain; scales in space and time
+    - area at which process occurs (space)
+    - **current and past climate** (time)
+    - projected climates
+    - (animals) seasonal patterns? 
+- limitation: compute power
+
+## software environments
+
+- open source
+    - **r**
+      - **sf** *vector data ala tidyverse*
+      - **terra** *fast raster data without headaches*
+      - **sdm** *full suite of modelling operations*
+    - **grass gis** *many modules for creating predictors*
+    - **qgis** *graphical user interface for visualization*
+    
+## dependent variables - presences
+
+- essential: occurrences of a species in space *(and time)*
+
+for linear models, check for spatial autocorrelation of occurrence records using Moran's I; optional thin records stepwise, removing the most influential records.
+
+## dependent variables - absences
+
+- optional: pseudoabsences of a species in space *(and time)*
+- more optional: absences of a species in space *(and time)*
+
+- if using presence and absence records
+  - linear models, 1:*many* presence to absence points
+  - machine learning, 1:1 presence to absence points
+
+## independent variables
+
+- variables relating to *patterns* in biotic distribution 
+  - relevant to *your* extent and grains 
+  - require *variation* 
+  - no focus on factors governing biological *processes*, rather features which
+  *correlate* with the known species distribution
+- limitation: ompute power
+  
+## independent variables - examples
+
+- domain: continental (e.g. North America)
+  - maximum and minimum daily temperatures, precipitation amount and form, hydrologic drainage
+- domain: regional (e.g. Southern Rockies)
+  - elevation, soil classes, solar radiation
+- domain: fine (e.g. East River Valley)
+  - micro topography, water relations, shade, soils, species compositions
+  
+## variance in independent variables
+
+explicitly check for variation to save compute resources
+
+## modelling approaches - overview
+
+- ensembles pt. I & II
+- linear models
+  - assumptions - dependent variables (IV)
+  - assumptions - independent variables (DV)
+  - modelling
+    - model evaluation
+  - machine learning
+    - assumptions ?
+    - modelling
+      - model evaluation
+- ensembles pt. III
+
+## ensembles pt I
+
+- problems with all models
+  - bad data
+  - influential outliers
+- with machine learning; 
+  - models can fixate on these observations
+  
+- solution:
+  - run many models, synthesize the results
+  
+> *"we are stronger together than we are alone"* - Walter Payton
+
+## ensembles pt II
+
+- implementations:
+  - weak learners; many simple decision tree models are combined to a single output
+    - bootstrap aggregation (**bagging**) e.g. *random forests*
+      - many models run independent of each  
+    - **boosting** e.g. *boosted regression trees, Adaboost, xgboost*
+      - many models run sequentially, focusing on correcting errors in the last iteration
+      
+  - *stacking* another form of combining many models
+    - can accommodate the consensus output from bagged, boosted, or traditional linear models
+  
+## linear models
+
+- commonly implemented:
+  - *generalized linear models* (glms)
+  - *generalized additive models* (gams)
+
+## linear models - assumptions DV
+
+## linear models - assumptions IV
+
+## modelling process
+
+all evaluation performed by computer -- too much information
+
+## machine learning 
+
+much more common approach than individual linear models
+
+species distributions are generally too complex for individual predictors, and building
+fully interactive terms would take a long time.
+
+the typical approach since the late 90's
+
+do the work for you
+
+## machine learning - assumptions
+
+none, get a few observations, the more the merrier.
+
+## modelling
+
+train/test split (partition data)
+
+- no free lunch 
+
+- commonly implemented:
+  - random forest 
+  - maximum entropy (maxent)
+
+## evaluation
+
+- accuracy
+  - precision
+  - recall
+- area under the curve (AUC)
+  - 
+- Cohen's kappa 
+  - unequal sample sizes, i.e. evaluate many models at once
+
+## ensembles pt II
+
+## predicting a model into space 
+
+## interpretation
+
+## tips and tricks
+
+- keep a lab notebook; experiments *in silico* ala experiments *in vitro*
+
+## conclusion
+
+## contact Info
+
+- github/sagesteppe (preferred)
+- reedbenkendorf2021@u.northwestern.edu
+
+## citations
