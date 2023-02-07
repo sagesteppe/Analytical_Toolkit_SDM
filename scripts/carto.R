@@ -1,0 +1,53 @@
+library(sf)
+library(tigris)
+library(tidyverse)
+library(ggmap)
+
+
+setwd('/home/reed/Documents/Analytical_Toolkit_SDM/scripts')
+source('functions.R')
+
+co <- c(left = -111, bottom = 34, right = -102, top = 44)
+co_map <- get_stamenmap(co, zoom = 8, maptype = "terrain-background")
+co_map <- ggmap_bbox(co_map)
+
+states <- tigris::states()
+places <- tigris::places(state = c('CO', 'NM', 'WY')) %>% 
+  filter(NAME %in% c('Denver', 'Albuquerque', 'Rawlins', 'Grand Junction',
+                     'Durango', 'Laramie', 'Lander'))
+
+ecoregions <- sf::read_sf("../data/us_eco_l4/us_eco_l4_no_st.shp") 
+
+ecoregions <- st_transform(ecoregions, 3857)
+ecoregion_bound <- st_transform(ecoregion_bound, 3857)
+states <- st_transform(states, 3857)
+
+
+buffer_distance <- units::as_units(50, "kilometers") # want to buffer the edges...
+ecoregion_bound <- st_convex_hull(ecoregions)
+ecoregion_bound <- st_buffer(ecoregion_bound, dist = buffer_distance) %>% 
+  st_transform(5070) %>% 
+  st_as_sf() 
+
+# import dependent variables
+
+b.alp <- st_read('../data/B.alpina_occ.shp')
+b.alp <- st_transform(b.alp, 3857)
+
+png(filename = '../graphics/besseya_occ.png', bg = 'transparent', width = 720, height = 720)
+ggmap(co_map) +
+  geom_sf(data = states, fill = NA, inherit.aes = FALSE, color = 'grey50') +
+  geom_sf(data = ecoregion_bound, alpha = 0.2, color = 'black', fill = NA, lwd = 2, inherit.aes = FALSE) +
+  geom_sf(data = ecoregions, fill = "darkslategray4", alpha = 0.5, inherit.aes = FALSE, color = 'darkslategray4') +
+  geom_sf_label(data = places, aes(label = NAME), inherit.aes = F,
+                alpha = 0.5, label.size  = NA) +
+  geom_sf(data = b.alp, inherit.aes = FALSE, color = '#4E2A84', size = 2) +
+  theme_void() +
+  labs(title = 'Occurrence records of Besseya alpina') + 
+  theme(plot.title = element_text(hjust = 0.5))
+dev.off()
+
+
+# prediction surface
+
+
