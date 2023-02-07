@@ -2,6 +2,7 @@ library(sf)
 library(tigris)
 library(tidyverse)
 library(ggmap)
+library(terra)
 
 
 setwd('/home/reed/Documents/Analytical_Toolkit_SDM/scripts')
@@ -19,7 +20,6 @@ places <- tigris::places(state = c('CO', 'NM', 'WY')) %>%
 ecoregions <- sf::read_sf("../data/us_eco_l4/us_eco_l4_no_st.shp") 
 
 ecoregions <- st_transform(ecoregions, 3857)
-ecoregion_bound <- st_transform(ecoregion_bound, 3857)
 states <- st_transform(states, 3857)
 
 
@@ -28,6 +28,7 @@ ecoregion_bound <- st_convex_hull(ecoregions)
 ecoregion_bound <- st_buffer(ecoregion_bound, dist = buffer_distance) %>% 
   st_transform(5070) %>% 
   st_as_sf() 
+ecoregion_bound <- st_transform(ecoregion_bound, 3857)
 
 # import dependent variables
 
@@ -49,5 +50,14 @@ dev.off()
 
 
 # prediction surface
+p2d <- '../data'
 
+prediction <- rast(file.path(p2d, 
+  list.files(path = p2d, pattern = 'tif')))
 
+erb_spat <- vect(ecoregion_bound)
+b.alp_spat <- vect(b.alp)
+
+png(filename = '../graphics/besseya_predicted.png', bg = 'transparent', width = 720, height = 720)
+plot(prediction, axes = F, main = 'modelled habitat suitability of B. alpina')
+dev.off()
