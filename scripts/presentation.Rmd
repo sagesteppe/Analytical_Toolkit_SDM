@@ -3,22 +3,32 @@ title: "Species Distribution Models (SDM's)"
 subtitle: "Analytical Toolbox for Ecologists and Evolutionary Biologists (PBC 470)"
 author: "Reed Clark Benkendorf<br>Northwestern University & The Chicago Botanic Garden<br>Southwest Conservation Corps & Bureau of the Land Management"
 date: "February 22, '23"
-output: ioslides_presentation
+output:
+  ioslides_presentation:
+    widescreen: true
 bibliography: ../citations/citations.bib
 ---
 
 <style>
 
+slide.title-slide h2 {
+  text-align: left;
+  color: #4E2A84;		
+  line-height: 1.2;
+}
+
 slide.backdrop {
   background: black;
 }
+
 body {
   background-color: black;
 }
 h2 { 
-text-align: right;
+ text-align: right;
  color: #4E2A84;		
 }
+
 h3 { 
  color: #3399ff;		
 }
@@ -46,12 +56,19 @@ source('functions.R')
 - aid in creation of reserves under climate change models
 - aid in predicting joint species distributions, i.e. obligate mutualisms 
 
+## applications - academic
+
+- fine scale models to study co-existence
+- develop candidate species for metabarcoding
+
 ## objectives
 
 using a number of known occurrences, identify areas in space which have
 similar habitat which have the potential to support populations of the species of interest
 
-but, what about dispersal?
+but, what about dispersal?  
+competition?  
+mutualisms?  
 
 ## methods - overview
 
@@ -80,8 +97,8 @@ but, what about dispersal?
     - **r**
       - **caret** *data partitioning* @kuhn2022caret
       - **sf** *vector data ala tidyverse* @pebesma2018sf
-      - **terra** *fast raster data without headaches* @hijman2022terra
-      - **sdm** *full suite of modelling operations*  @naimi2016sdm
+      - **terra** *raster data without headaches* @hijman2022terra
+      - **sdm** *modelling operations*  @naimi2016sdm
     - **grass gis** *many modules for creating predictors*
     - **qgis** *graphical user interface for visualization*
     
@@ -90,6 +107,15 @@ but, what about dispersal?
 - essential: occurrences of a species in space *(and time)*
 
 for linear models, check for spatial autocorrelation of occurrence records using Moran's I; optional thin records stepwise, removing the most influential records.
+
+
+```{r}
+knitr::include_graphics('../graphics/BIEN.png')
+knitr::include_graphics('../graphics/GBIF.png')
+knitr::include_graphics('../graphics/FIA.png')
+knitr::include_graphics('../graphics/AIM.png')
+```
+
 
 ## dependent variables - absences
 
@@ -139,7 +165,7 @@ explicitly check for variation to save compute resources
 ## ensembles pt I
 
 - problems with all models
-  - bad data
+  - garbage in -> garbage out
   - influential outliers
 - with machine learning; 
   - models can fixate on these observations
@@ -219,8 +245,9 @@ train/test split (partition data)
   - sensitivity: probability of modelling giving a TRUE, when value is TRUE
   - specificity: probability of modelling giving a FALSE, when value is FALSE
 - Area Under the ROC Curve (AUC)
-- Cohen's kappa 
+- True Skill Statistic (TSS)
   - unequal sample sizes, i.e. evaluate many models at once
+- Cohen's kappa 
 
 ## ensembles pt II
 
