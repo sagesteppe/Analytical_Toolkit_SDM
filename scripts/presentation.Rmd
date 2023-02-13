@@ -223,7 +223,7 @@ knitr::include_graphics('../graphics/FIA.png')
 
 ## dependent variables - absences example {.flexbox .vcenter}
 
-
+**just create some random red points and add em to the map above.** 
 
 ## independent variables
 
@@ -233,15 +233,60 @@ knitr::include_graphics('../graphics/FIA.png')
   - no focus on factors governing biological *processes*, rather features which
   *correlate* with the known species distribution
 - limitation: compute power
-  
-## independent variables - examples
 
-- domain: continental (e.g. North America)
-  - maximum and minimum daily temperatures, precipitation amount and form, hydrologic drainage
-- domain: regional (e.g. Southern Rockies)
-  - elevation, soil classes, solar radiation
-- domain: fine (e.g. East River Valley)
-  - micro topography, water relations, shade, soils, species compositions
+<div class="notes">
+
+OK, so here is an essential component of SDM's, they are NOT causative! They rely entirely on CORRELATION, even if you are using variables which you know have causal relationships with plant distributions the models that we are creating will not really reflect causal processes. What we want to gather together, are variables which we think co-occur with the species! Generally these pretty much end of being causal variables, but we do not sell them as such. 
+
+These variables need to reflect processes which vary in both your domain, and within your grains. 
+
+</div>
+  
+## independent variables - examples {.build .flexbox .vcenter}
+
+domain: continental (e.g. North America)    
+    - maximum and minimum daily temperatures [monthly, 4km]  
+    - precipitation  [monthly, 4km]  
+    - hydrologic drainage [millenial, 4km]  
+  
+domain: regional (e.g. Southern Rockies)    
+    - elevation  [millenial, 1km]  
+    - soil classes  [millenial, 1km]  
+    - solar radiation [millenial, 1km]  
+    - precipitation form [monthly, 1km]  
+  
+domain: fine (e.g. McDonald Woods)    
+    - micro topography   [decade, 1m]  
+    - water relations  [decade, 1m]  
+    - shade  [weekly, 1m]  
+    - soils  [decade, 1m]  
+    
+<div class="notes">
+
+So as an example of how domain may affect our selection of independent variables, we can image we are interested in modelling species at three different levels. The first is across North America, we will probably have very good results using rather simple variables, at relatively coarse grains. For example, the maximum temperature - e.g. heat stress, and minimum temperatures are linked to the movement of moisture in plants and have enormous effects on distributions. Even the two sides of the Mississippi River Drainage basin, largely this an area so flat for nearly a thousand miles you cannot even detect changes in elevation or slope; might have the single largest effect on the flora of north america!
+
+When we move to less extensive domains our predictors will change. We may start to gather very good information from toporgraphic relief, especially in the west; soil now be at a scale where it correlates with distributions at the class level, and solar radiation may start to tease out mesic north facing forested areas. 
+
+As we move to fine domains, and these really are the frontier for these models, especially in academic settings, we are really starting to get to very directly related features. Here we can really start to integrate field experiments, and nitty gritty natural history observations with species distribution models. Assuming you can find the spatial data to do so!
+
+</div>
+
+    
+## independent variables - specific examples
+
+- Percent bedrock *(rocky, young soils)*
+
+- Elevation *(alpine habitat)*
+
+- Bare ground *(few others plants?)*
+
+- X-Y coords *(alpine zone decreases with latitude)*
+
+- Soil surface pH *(calcareous bedrock?)*
+
+- Precipitation as snow *(monsoonal influence?)*
+
+
   
 ## variance in independent variables
 
@@ -259,7 +304,7 @@ knitr::include_graphics('../graphics/FIA.png')
   
   - warrants simplifying a variable?
   
-  ![correlated!](../graphics/variation.resized.png)
+  ![](../graphics/variation.resized.png)
 </div>
 
 ## modelling approaches - overview
@@ -276,18 +321,23 @@ knitr::include_graphics('../graphics/FIA.png')
       - model evaluation
 - ensembles pt. III
 
-## ensembles pt I
+## ensembles pt I {.build}
 
-- problems with all models
-  - garbage in -> garbage out
-  - influential outliers
-- with machine learning; 
-  - models can fixate on these observations
+problems with all models  
+  - garbage.(in) -> garbage.(out)    
+  - influential outliers  
+
+with machine learning;  
+  - models can fixate on these observations      
   
-- solution:
-  - run many models, synthesize the results
+solution:  
+  - run many models, synthesize the results    
   
+<br>
+<br>
+<div class="centered">
 > *"we are stronger together than we are alone"* - Walter Payton
+</div>
 
 ## ensembles pt II
 
@@ -320,9 +370,7 @@ knitr::include_graphics('../graphics/FIA.png')
 </div>
 
 
-
-
-## modelling process
+## modelling process {.flexbox .vcenter}
 
 all evaluation performed by computer -- too much information
 
@@ -337,7 +385,7 @@ the typical approach since the late 90's
 
 do the work for you
 
-## machine learning - assumptions
+## machine learning - assumptions {.flexbox .vcenter}
 
 none, get a few observations, the more the merrier.
 
@@ -346,13 +394,15 @@ none, get a few observations, the more the merrier.
 train/test split (partition data)
 
 - no free lunch 
-  - no silver bullet machine learning algorithm; each is able to work better than 
-  others under diverse circumstances.
-  - try many types of models, select some that work for *your* application
+  - no silver bullet machine learning algorithm  
+  - each is able to work better than others under diverse circumstances  
+- try many types of models, select some that work for *your* application
 
-- commonly implemented:
-  - random forest 
+- commonly algorithms:
   - maximum entropy (maxent)
+  - random forest 
+  - boosting (brt)
+  - support vector model
 
 ## evaluation I
 
@@ -381,20 +431,47 @@ of evaluation criteria to weigh them
 - r packages, such as *terra*, do all the work for you
 - accordingly, species distribution models create a map as a product
 
-## interpretation
+## interpretation 
 
-<div class="columns-2">
-  - percent suitability of habitat
-  - of each cell - not proportion of cell
-  - based on your model
+- percent suitability of habitat
+- of each cell - not proportion of cell
+- based on your model
   
-  ![prediction](../graphics/besseya_predicted.resized.png)
-</div>
 
+## interpretation - example {.flexbox .vcenter}
+
+![Occurence Records](../graphics/besseya_predicted.resized.png){height=100%}
 
 ## tips and tricks
 
-- keep a lab notebook; experiments *in silico* ala experiments *in vitro*
+- keep a lab notebook; this is bench science 
+
+- always start models small (avoid computer crashes)  
+
+- use strong and discrete directory organization  
+
+- scratch paper, whiteboards, flowcharts
+
+- dynamic programming; import/export data
+
+- track code on github  
+
+## objectives - recapped {.build}
+
+using known occurrences of a species, identify areas which have
+similar habitat and the potential to support populations 
+
+mutualisms?  
+
+*modelling two species together, joint-SDMs*
+
+competition?  
+
+*using suitability surfaces to plant assemblages of species in field experiments'*
+
+but, what about dispersal?  
+
+*using gridded surfaces to model the probability of dispersal from known to suitable habitat*  
 
 ## conclusion
 
@@ -404,23 +481,34 @@ of evaluation criteria to weigh them
 - new avenues (J-SDM's) can include mutualisms
 - stacked species (S-SDM's) distributions for predicting ecological assemblies
 
-## contact info
+## contact info {data-background=../graphics/collecting.jpg size=cover, .flexbox .vcenter}
 
-- github/sagesteppe (preferred)
-- reedbenkendorf2021@u.northwestern.edu
-
+<div class="white"; font-size: 1.5em>
+- github/sagesteppe
+</div>
 
 ## some extra info 
 
-## modelling ensemble learning
+## modelling resources
+
+
+two hour discussion of the ['sdm'](https://www.youtube.com/watch?v=83dMS3bcjJM) package by an author
+
+large [repository](https://github.com/sagesteppe/SDMS_RMBL) for high throughput modelling 
+
+large [repository](https://github.com/sagesteppe/Spatial_Data_Science_R) about spatial data in R
+
+short [activity](https://github.com/sagesteppe/Spatial_Data_Science_R/blob/main/SDS_Laboratory.R) using a sdm like process to teach spatial data
+
+## modelling ensemble learning {.flexbox .vcenter}
 
 > __Ensemble learning__ utilizes many sets of trees, each tree being composed of many binary decisions, to create a single model. Each independent variable ( - or *feature*) may become a node on the tree - i.e. a location on the tree where a binary decision will move towards a predicted outcome. Each of the decision tree models which ensemble learning utilizes is a weak model, each of which may suffer due to high variance or bias, but which produce better outcomes than would be expected via chance. When ensembled these models generate a strong model, a model which should have more appropriately balanced variance and bias and predicts outcomes which are more strongly correlated with the expected values than the individual weak models. 
 
-## modelling random forest
+## modelling random forest {.flexbox .vcenter}
 
 > *__Random Forest (RF)__* the training data are continually bootstrap re-sampled, in combination with random subsets of features, to create nodes which attempt to optimally predict a known outcome. A large number of trees are then aggregated, via the most common predictions, to generate a final classification prediction tree. Each individual prediction tree is generated independently of the others. 
 
-## modelling boosted regression trees
+## modelling boosted regression trees {.flexbox .vcenter}
 
 > *__Boosted Regression Tree (BRT)__* (or Gradient Boosted tree) An initial tree is grown, and all other trees are derived sequentially from it, as each new tree is grown the errors in responses from the last tree are weighed more heavily so that the model focuses on selecting dependent variables which refine predictions. All response data and predictor variables are kept available to all trees.
 
