@@ -1,17 +1,24 @@
 ---
 title: "Species Distribution Models (SDM's)"
-subtitle: "Analytical Toolbox for Ecologists and Evolutionary Biologists (PBC 470)"
+subtitle: "Analytical Toolbox for Ecologists & Evolutionary Biologists (PBC 470)"
 author: "Reed Clark Benkendorf<br>Northwestern University & The Chicago Botanic Garden<br>Southwest Conservation Corps & Bureau of the Land Management"
 date: "February 22, '23"
 output:
   ioslides_presentation:
     widescreen: true
+    logo: ../graphics/cbg_logo.jpg
 bibliography: ../citations/citations.bib
 ---
 
 <style>
 
+slide.title-slide h1 {
+  font-size: 2.0em;
+  line-height: 1.5;
+}
+
 slide.title-slide h2 {
+  font-size: 1.0em;
   text-align: left;
   color: #4E2A84;		
   line-height: 1.2;
@@ -24,6 +31,7 @@ slide.backdrop {
 body {
   background-color: black;
 }
+
 h2 { 
  text-align: right;
  color: #4E2A84;		
@@ -274,20 +282,19 @@ As we move to fine domains, and these really are the frontier for these models, 
     
 ## independent variables - specific examples
 
+<div class="columns-2">
+
 - Percent bedrock *(rocky, young soils)*
-
 - Elevation *(alpine habitat)*
-
 - Bare ground *(few others plants?)*
-
 - X-Y coords *(alpine zone decreases with latitude)*
-
 - Soil surface pH *(calcareous bedrock?)*
-
 - Precipitation as snow *(monsoonal influence?)*
 
-
   
+![](../graphics/alpine_plant_life.resized.jpg)
+</div>
+
 ## variance in independent variables
 
 <div class="columns-2">
@@ -339,17 +346,18 @@ solution:
 > *"we are stronger together than we are alone"* - Walter Payton
 </div>
 
-## ensembles pt II
+## ensembles pt II  {.build }
 
-- implementations:
-  - weak learners; many simple decision tree models are combined to a single output
-    - bootstrap aggregation (**bagging**) e.g. *random forests*
-      - many models run independent of each  
-    - **boosting** e.g. *boosted regression trees*
-      - many models run sequentially, focusing on correcting errors in the last iteration
+weak learners; many simple decision tree models are combined to a single output
+
+bootstrap aggregation (**bagging**) e.g. *random forests*    
+  - many models run independent of each    
+    
+**boosting** e.g. *boosted regression trees*    
+  - many models run sequentially, focusing on correcting errors in the last iteration
       
-  - *stacking* another form of combining many models
-    - can accommodate the consensus output from bagged, boosted, or traditional linear models
+*stacking*   
+   - can accommodate the consensus output from bagged, boosted, or traditional linear models
   
 ## linear models
 
@@ -358,6 +366,9 @@ solution:
   - *generalized additive models* (gams)
 
 ## linear models - assumptions DV
+
+- distinct records, e.g. no duplicates of herbaria specimens    
+- one record per cell of gridded surface    
 
 ## linear models - assumptions IV
 
@@ -368,7 +379,6 @@ solution:
   
   ![correlated!](../graphics/vifstep.resized.png)
 </div>
-
 
 ## modelling process {.flexbox .vcenter}
 
