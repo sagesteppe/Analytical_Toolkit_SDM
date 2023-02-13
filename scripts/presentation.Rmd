@@ -46,14 +46,19 @@ source('functions.R')
 ## talk overview
 
 - Applications  
+
 - Objectives
+
 - Methods
+
 - Interpretation
 
 ##  applications - conservation  
 
 - aid in discovery of new populations of imperiled plants
+
 - aid in creation of reserves under climate change models
+
 - aid in predicting joint species distributions, i.e. obligate mutualisms 
 
 ## applications - academic
@@ -61,70 +66,164 @@ source('functions.R')
 - fine scale models to study co-existence
 - develop candidate species for metabarcoding
 
-## objectives
+## objectives {.build}
 
-using a number of known occurrences, identify areas in space which have
-similar habitat which have the potential to support populations of the species of interest
+using known occurrences of a species, identify areas which have
+similar habitat and the potential to support populations 
 
 but, what about dispersal?  
+
 competition?  
+
 mutualisms?  
 
-## methods - overview
+## an example species to accompany our study
 
-- define spatial domain and grain
-- software environments
-- dependent variables
-- independent variables
-- modelling approaches
-- predicting a model into space
+ [*Besseya* (=*Synthris*) *alpina* (A. Gray) Rydberg.](http://floranorthamerica.org/Synthyris_alpina)
+ 
+<div class="columns-2">
 
-## domain and grain 
 
-- domain; spatial extent of study
-    - administrative boundary (e.g. State, Forest Preserve)
-    - ecological model (e.g. **Omernik Ecoregions**)
-- grain; scales in space and time
-    - area at which process occurs (space)
-    - **current and past climate** (time)
-    - projected climates
-    - (animals) seasonal patterns? 
-- limitation: compute power
+![American Basin](../graphics/American_Basin.jpg){width=75% height=75%}
+
+![*B. alpina*, Franklin #3948](../graphics/Besseya_alpina_sheet.jpg){width=75% height=75%}
+</div>
+
+<div class="notes">
+
+As an example species, we are going to use one that i modelled as a portion of masters work. *Besseya alpina*, alpine kittentails, is a part of the Plantaginaceae and closely aligned with *Veronica*. This species is endemic to Western North America, and it is confined entirely to rocky or stony fellfields in the alpine. as would be seen 
+
+</div>
+
+## methods - overview {.build}
+
+define spatial domain and grain
+
+software environments
+
+dependent variables
+
+independent variables
+
+modelling approaches
+
+model evaluation
+
+predicting a model into space
+
+## domain and grain {.build .flexbox .vcenter}
+
+domain; spatial extent of study  
+  - administrative boundary   
+  - ecological model 
+    
+grain; scales in space and time  
+- resolution at which process occurs (space)    
+- current and past climate (time)    
+- projected climates    
+- (animals) seasonal patterns?     
+
+limitation: compute power  
+
+<div class="notes">
+
+The first few steps in your analysis is to reasonably define a few parameters. It is easy to get carried away when you do not have to collect field data yourself, and try to perform analyses at enormous spatial scales, or at very very fine details.
+
+Remember the 'domain' is the spatial extent over which we are interested in studying a process. Generally, these are defined by funding agencies, e.g. for all of my normal office work, I use extents of land ownership; a form of administrative boundary. For academic work, depending on how the funding comes through, we may be much more likely to use domains informed by ecological processes. Examples would be a floristic province, or an ecoregion concept. 
+
+Grain is the resolution of an event in both time and space. For a spatial grain, you want to gather predictor variables which are able to correlate well with your species. For example day length in spring for plants, will only vary substantially over quite large scales. Elevation at a scale of 1 meter, rather than a more coarse surface would contain much meaningless variation. So we must balance these; however, most publicly available spatial data come only at a few resolutions (800m^2^, 1000m^2^, or 4000m^2^).
+
+Temporal grain is very important for migratory animals, it is also very important if you want to see a species distribution before climate change effects, and after, and if you want to project your results into the future under climate change projections. 
+
+It sounds like you will have many options to sort through here, but no! You are informed by computer power, you do what you can, just like with fieldwork. 
+
+</div>
+
+## domain and grain {.flexbox .vcenter}
+
+![Domain](../graphics/domain.resized.png){height=100%}
+
+
+<div class="notes">
+
+Our species Besseya alpina is endemic to the Southern Rocky Mountains. During this modelling endeavor we will do what most Species distribution modellers do and model the whole range. As we see here, we have a focal area, in greenish blue, which constitutes an Ecological Region, an area with a clustered set or properties. We then buffer this area by a moderate amount, around 100 kilometers, and we have established a domain. 
+
+</div>
+
 
 ## software environments
 
-- open source
-    - **r**
-      - **caret** *data partitioning* @kuhn2022caret
-      - **sf** *vector data ala tidyverse* @pebesma2018sf
-      - **terra** *raster data without headaches* @hijman2022terra
-      - **sdm** *modelling operations*  @naimi2016sdm
-    - **grass gis** *many modules for creating predictors*
-    - **qgis** *graphical user interface for visualization*
+- **R**
+  - **caret** *data partitioning* @kuhn2022caret
+  - **sf** *vector data ala tidyverse* @pebesma2018sf
+  - **terra** *raster data without headaches* @hijman2022terra
+  - **sdm** *modelling operations*  @naimi2016sdm
+  
+- **grass gis** *many modules for creating predictors*
+
+- **qgis** *graphical user interface for mouse guided visualization*
+
+<div class="notes">
+
+There are a handful of options which exist for generating species distribution models and processing geographic information systems data. I can only advocate the use of open source software, as this allows others to benefit and reproduce our research without considerable fiscals resources. Furthermore, open source alternatives are generally much better than paid software. As species distribution models are really all about the statistics, R, is an un- paralled software to generate SDM's in, and will keep your notes for you! However, grass gis offers several modules, all of which are accessible from the command line, which create useful spatial data products. Likewise QGIS is a really great lightweight GIS with a super friendly graphical user interface which you can use to visualize your predictor variables more dynamically than the experience offered by R and Rstudio. 
+
+We rely heavily on the sdm package, which is one of the best examples of *object orientated programming* which I have seen in R, and is capable of loading in statistical methods from nearly any R package you want! For example if you want any flavor of linear models you can import new methods from any Ben Bolker package you want! 
+
+</div>
     
 ## dependent variables - presences
 
-- essential: occurrences of a species in space *(and time)*
+- occurrences of a species in space *(and time)*
 
-for linear models, check for spatial autocorrelation of occurrence records using Moran's I; optional thin records stepwise, removing the most influential records.
-
+- Linear models:
+  - check for spatial autocorrelation using Morans I
+  - sampling artefact? remove samples
+  - thin points piecewise by most offending record
 
 ```{r}
 knitr::include_graphics('../graphics/BIEN.png')
 knitr::include_graphics('../graphics/GBIF.png')
-knitr::include_graphics('../graphics/FIA.png')
-knitr::include_graphics('../graphics/AIM.png')
 ```
+
+## dependent variables - presences  example {.flexbox .vcenter}
+
+![Occurence Records](../graphics/besseya_occ.png){height=100%}
+
+<div class="notes">
+
+In general, when it comes to rare species your only sources of occurrence records are going to be from herbaria, and subsequent targeted sampling for that species, or surveying for  an entirely rare habitat type which this and other species occur in. Usually, for these records you want to work with a Natural Heritage Program, or Natural History Survey; they tend to specialize in these surveys and maintenance of these records.  
+
+For more common species, you are able to now glean considerable amounts of information from citizen science resources; although these tend to be phenotypically biased towards pretty flowers, at the expense of truly gorgeous flowers such as those in groups like the Sedges. 
+
+</div>
 
 
 ## dependent variables - absences
 
-- optional: pseudoabsences of a species in space *(and time)*
-- more optional: absences of a species in space *(and time)*
+- optional: pseudoabsences space *(and time)*
+- more optional: absences space *(and time)*
 
-- if using presence and absence records
-  - linear models, 1:*many* presence to absence points
-  - machine learning, 1:1 presence to absence points
+<div class="columns-2">
+
+- presence:absence records  
+  - linear models - 1:*many*  
+  - machine learning - 1:1  
+- distance between presences
+  - geographic
+  - environmental
+  
+  ![correlated!](../graphics/AIM.resized.png)
+
+</div>
+  
+```{r}
+knitr::include_graphics('../graphics/FIA.png')
+```
+
+
+## dependent variables - absences example {.flexbox .vcenter}
+
+
 
 ## independent variables
 
@@ -133,7 +232,7 @@ knitr::include_graphics('../graphics/AIM.png')
   - require *variation* 
   - no focus on factors governing biological *processes*, rather features which
   *correlate* with the known species distribution
-- limitation: ompute power
+- limitation: compute power
   
 ## independent variables - examples
 
@@ -146,7 +245,22 @@ knitr::include_graphics('../graphics/AIM.png')
   
 ## variance in independent variables
 
-explicitly check for variation to save compute resources
+<div class="columns-2">
+
+  - explicitly check for variation
+  
+  - carefully encode categorical data
+  
+  - too much, may not be useful
+  
+  - too little, may not be useful
+  
+  - pilot knock out studies; use one variable leaving the others out
+  
+  - warrants simplifying a variable?
+  
+  ![correlated!](../graphics/variation.resized.png)
+</div>
 
 ## modelling approaches - overview
 
@@ -173,17 +287,7 @@ explicitly check for variation to save compute resources
 - solution:
   - run many models, synthesize the results
   
-  
 > *"we are stronger together than we are alone"* - Walter Payton
-
-
-<div class="notes">
-These are some example notes in *markdown* format.
-
-- List items can be included
-
-- Like this
-</div>
 
 ## ensembles pt II
 
@@ -206,6 +310,17 @@ These are some example notes in *markdown* format.
 ## linear models - assumptions DV
 
 ## linear models - assumptions IV
+
+<div class="columns-2">
+  - Variance inflation
+  - identify correlated variables
+  - pilot knock out studies; use one variable leaving the others out
+  
+  ![correlated!](../graphics/vifstep.resized.png)
+</div>
+
+
+
 
 ## modelling process
 
@@ -239,15 +354,19 @@ train/test split (partition data)
   - random forest 
   - maximum entropy (maxent)
 
-## evaluation
+## evaluation I
 
-- accuracy: proportion of all predictions which are 
-  - sensitivity: probability of modelling giving a TRUE, when value is TRUE
-  - specificity: probability of modelling giving a FALSE, when value is FALSE
-- Area Under the ROC Curve (AUC)
-- True Skill Statistic (TSS)
-  - unequal sample sizes, i.e. evaluate many models at once
-- Cohen's kappa 
+$$ Accuracy = \frac{\text{correct classifications}}{\text{all classifications }} $$
+$$ Sensitivity = \frac{\text{true positives}}{\text{true positives + false negatives }} $$ probability of the method giving a positive result when the test subject is positive.
+
+$$ Specificity = \frac{\text{true negatives}}{\text{true negatives + false positives }} $$ probability of the method giving a negative result when the test subject is negative  
+
+## evaluation II 
+
+- Area Under the ROC Curve (AUC)  
+- True Skill Statistic (TSS)  
+  - unequal sample sizes, i.e. evaluate many models at once  
+- Cohen's kappa
 
 ## ensembles pt II
 
@@ -264,7 +383,14 @@ of evaluation criteria to weigh them
 
 ## interpretation
 
-- this map has values of habitat suitability, based on your model. 
+<div class="columns-2">
+  - percent suitability of habitat
+  - of each cell - not proportion of cell
+  - based on your model
+  
+  ![prediction](../graphics/besseya_predicted.resized.png)
+</div>
+
 
 ## tips and tricks
 
