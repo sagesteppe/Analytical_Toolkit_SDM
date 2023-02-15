@@ -119,6 +119,12 @@ model evaluation
 
 predicting a model into space
 
+<div class="notes">
+
+the general steps for creating species distribution models are generally pretty similar as for most other projects. One of the real first pieces of information to work towards figuring out is how much computer power you have, and that will inform the domain and grains. Generally who you are working with, or what experience with software you have wil determine the environments you are using. Acquiring species records, and the independent variables can take some review time, but both are now largely available at specialized databasea for them. The choices of modelling approaches to attempt again come largely down to personal experience and familiarity with a type of model or algorithms. Evaluation kind of comes down to where you would feel the least bad about being wrong; do you want to over or under predict? What are the consequences of preding a false presence? 
+
+</div>
+
 ## domain and grain {.build .flexbox .vcenter}
 
 domain; spatial extent of study  
@@ -151,7 +157,6 @@ It sounds like you will have many options to sort through here, but no! You are 
 
 ![Domain](../graphics/domain.resized.png){height=100%}
 
-
 <div class="notes">
 
 Our species Besseya alpina is endemic to the Southern Rocky Mountains. During this modelling endeavor we will do what most Species distribution modellers do and model the whole range. As we see here, we have a focal area, in greenish blue, which constitutes an Ecological Region, an area with a clustered set or properties. We then buffer this area by a moderate amount, around 100 kilometers, and we have established a domain. 
@@ -160,16 +165,22 @@ Our species Besseya alpina is endemic to the Southern Rocky Mountains. During th
 
 
 ## software environments
-
+<div class="columns-2">
 - **R**
-  - **caret** *data partitioning* @kuhn2022caret
   - **sf** *vector data ala tidyverse* @pebesma2018sf
   - **terra** *raster data without headaches* @hijman2022terra
   - **sdm** *modelling operations*  @naimi2016sdm
-  
+  - **caret** *ML / data partitioning* @kuhn2022caret
 - **grass gis** *many modules for creating predictors*
-
 - **qgis** *graphical user interface for mouse guided visualization*
+
+![](../graphics/terra.resized.png)
+![](../graphics/sf.resized.png)
+![](../graphics/caret.resized.png)
+![](../graphics/grass.resized.png)
+![](../graphics/qgis.resized.png){height=50%, width=50%}
+
+</div>
 
 <div class="notes">
 
@@ -181,17 +192,26 @@ We rely heavily on the sdm package, which is one of the best examples of *object
     
 ## dependent variables - presences
 
+<div class="columns-2">
 - occurrences of a species in space *(and time)*
-
+- geographic accuracy / spatial grain
 - Linear models:
   - check for spatial autocorrelation using Morans I
-  - sampling artefact? remove samples
-  - thin points piecewise by most offending record
+  - sampling artifact? remove samples
+  - thin points stepwise by most 'offending' record
 
-```{r}
-knitr::include_graphics('../graphics/BIEN.png')
-knitr::include_graphics('../graphics/GBIF.png')
-```
+
+![](../graphics/BIEN.resized.png)
+![](../graphics/GBIF.resized.png)
+![](../graphics/superbloom_17.resized.jpg){height=50%}
+
+</div>
+
+<div class="notes">
+
+SO you need records of plant occurrences. The unequivocally most useful, and unlikely to ever be approached, source for these are herbaria. These things are huge people, the Field Museum Herbarium alone has 2.7 million records; these are enormous datasets we have at our disposal. Fortunately, what started to be developed when I came on the scene are what we call digital herbaria consortia, which collect records from all herbaria in a region in one place. What started to exist when you all came around were the 'aggregators' which aggregated the records from the consortia, and now citizen science records! These make getting records absurdly easy, and I kid you not, I hear tales of the invention of a 'conglomerator' for the aggregators on the breezes that blow from the east. 
+
+</div>
 
 ## dependent variables - presences  example {.flexbox .vcenter}
 
@@ -199,12 +219,11 @@ knitr::include_graphics('../graphics/GBIF.png')
 
 <div class="notes">
 
-In general, when it comes to rare species your only sources of occurrence records are going to be from herbaria, and subsequent targeted sampling for that species, or surveying for  an entirely rare habitat type which this and other species occur in. Usually, for these records you want to work with a Natural Heritage Program, or Natural History Survey; they tend to specialize in these surveys and maintenance of these records.  
+In general, when it comes to rare species your only sources of occurrence records are going to be from herbaria, and subsequent targeted sampling for that species, or surveying for  an entirely rare habitat type which this and other species occur in. Usually, for these records you want to work with a Natural Heritage Program, or Natural History Survey; they tend to specialize in these surveys and maintenance of these records.  One problem with old records, which is somewhat ameliorated for rare species, is the accuracy of the records geolocation. Old maps were not exceptional, and most botanists don't press or note exactly where a specimen came from in the old days. 
 
 For more common species, you are able to now glean considerable amounts of information from citizen science resources; although these tend to be phenotypically biased towards pretty flowers, at the expense of truly gorgeous flowers such as those in groups like the Sedges. 
 
 </div>
-
 
 ## dependent variables - absences
 
@@ -311,7 +330,17 @@ As we move to fine domains, and these really are the frontier for these models, 
   
   - warrants simplifying a variable?
   
+  - t.test the difference in values between presence and absence points
+  
   ![](../graphics/variation.resized.png)
+</div>
+
+<div class="notes">
+
+OK so more of what we have discussed already. You are compute limited, and can't be dragging along free loading variables. If you are including a variable, be sure that it is going to contribute something within the domain and at the scales which you are working with. 
+
+People get pretty into this, especially with all types of machine learning - which we'll discuss later, but basically try and reduce your predictors down to those which offer something. The simplest approach is just viewing the variance and seeing if you have anything low, for example that top-most bar.  The next level is comparing the values which are obtained from your presence and absence points with a t.test, no difference? why keep it. A more laborious, but more useful approach, involve creating simple models, and seeing which variables are meaningful predictors of the response using selection procedures. 
+
 </div>
 
 ## modelling approaches - overview
@@ -373,11 +402,17 @@ bootstrap aggregation (**bagging**) e.g. *random forests*
 ## linear models - assumptions IV
 
 <div class="columns-2">
-  - Variance inflation
+  - Variance inflation (vifstep or vifcor)
   - identify correlated variables
-  - pilot knock out studies; use one variable leaving the others out
+  - pilot knock out studies; use one variable of the set as a predictor leaving the others out
   
   ![correlated!](../graphics/vifstep.resized.png)
+</div>
+
+<div class="notes">
+
+So, I'm sure as you all have seen environmental predictors are generally highly correlated. If you are going to be using them for species distribution models which you will be, check them. There are not special considerations for spatial contexts worth worrying about. 
+
 </div>
 
 ## modelling process {.flexbox .vcenter}
@@ -387,6 +422,8 @@ all evaluation performed by computer -- too much information
 ## machine learning 
 
 much more common approach than individual linear models
+
+many 'weak learners'
 
 species distributions are generally too complex for individual predictors, and building
 fully interactive terms would take a long time.
@@ -408,20 +445,59 @@ train/test split (partition data)
   - each is able to work better than others under diverse circumstances  
 - try many types of models, select some that work for *your* application
 
-- commonly algorithms:
+- common algorithms:
   - maximum entropy (maxent)
-  - random forest 
+  - random forest (rf)
   - boosting (brt)
-  - support vector model
+  - support vector model (svm)
 
-## evaluation I
+## evaluation I {.build}
+
+Practitioners are *always* wrong. 
+
+How do you *want* to be wrong?   
+
+the downsides of predicting suitable habitat where it isn't?
+
+the downsides of predicting non-suitable habitat where it really is?    
+
+What is the cost of *'better'* predictions?  
+
+other projects? priorities? deadlines?   
+
+<div class="notes">
+
+If you are in this room right now, it is because you are more familiar with being right than being wrong. Which is excellent in most ways, except it has probably created an aversion to being wrong for you, which can lead to an aversion to taking risks; but we'll side line that. 
+
+*Practitioners are always wrong. *
+But folks, life is not a written test. It has problems you, or really rather your teachers, will not let you ignore. and I gurantee you every day a botanists has to make more than a few decisions one will be wrong; and somehow alot of these will end up right in the end too by some bizarre miracle. Enough sentiment!
+
+*how do you want to be wrong*
+Just like a controlled fall, when we start making models, if we hope to apply them, we want to understand how to fall with the least harm. So which parts of your models and predictions are you willing to sacrifice to being less correct than the others?
+
+*the downsides of predicting suitable habitat where it isn't?*
+If you are working on restoration projects and you are working to decide what to plant, you may seek advice from a climate change projection seeding map. If this map is wrong, you are likely to be out hundreds of thousands of dollars in error, at the expense of purchasing other seeds with this money. 
+
+*the downsides of predicting non-suitable habitat where it really is?*
+If you are trying to create a very large reserve, by looking at a variety of overlapping species distributions, and you have agreeable partners, than the consequences are very minimal. 
+
+*What is the cost of better predictions?*
+You may find like you have no time to do the tihngs you want to do being in Winter quarter and all, but things will slow down some time soon. Things will slow down, but you never have the time to do what you wan tto do, and you are going to need to prioritize! What are the consequences of hyper tuning and parameratizing you model? 
+
+</div>
+
+
+## evaluation II {.build}
 
 $$ Accuracy = \frac{\text{correct classifications}}{\text{all classifications }} $$
+
 $$ Sensitivity = \frac{\text{true positives}}{\text{true positives + false negatives }} $$ probability of the method giving a positive result when the test subject is positive.
+
 
 $$ Specificity = \frac{\text{true negatives}}{\text{true negatives + false positives }} $$ probability of the method giving a negative result when the test subject is negative  
 
-## evaluation II 
+
+## evaluation III
 
 - Area Under the ROC Curve (AUC)  
 - True Skill Statistic (TSS)  
@@ -479,7 +555,7 @@ competition?
 
 *using suitability surfaces to plant assemblages of species in field experiments'*
 
-but, what about dispersal?  
+dispersal?  
 
 *using gridded surfaces to model the probability of dispersal from known to suitable habitat*  
 
@@ -493,7 +569,8 @@ but, what about dispersal?
 
 ## contact info {data-background=../graphics/collecting.jpg size=cover, .flexbox .vcenter}
 
-<div class="white"; font-size: 1.5em>
+<div class="white"; 
+font-size: 3.0em; >
 - github/sagesteppe
 </div>
 
