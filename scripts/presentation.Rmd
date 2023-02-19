@@ -63,16 +63,19 @@ source('functions.R')
 
 ##  applications - conservation  
 
-- aid in discovery of new populations of imperiled plants
+- aid in discovery of new populations of imperiled plants  
 
-- aid in creation of reserves under climate change models
+- aid in creation of reserves under climate change models  
 
-- aid in predicting joint species distributions, i.e. obligate mutualisms 
+- aid in predicting joint species distributions, i.e. obligate mutualisms   
+
+- aid in modelling spread of noxious species to novel ranges (but see @liu2020species)  
 
 ## applications - academic
 
-- fine scale models to study co-existence
 - develop candidate species for metabarcoding
+- fine scale models to study co-existence
+- used in population biology (but see @LeeYaw2022species)
 
 ## objectives {.build}
 
@@ -298,7 +301,6 @@ As we move to fine domains, and these really are the frontier for these models, 
 
 </div>
 
-    
 ## independent variables - specific examples
 
 <div class="columns-2">
@@ -504,6 +506,18 @@ $$ Specificity = \frac{\text{true negatives}}{\text{true negatives + false posit
   - unequal sample sizes, i.e. evaluate many models at once  
 - Cohen's kappa
 
+## evaluation IV - example {.flexbox .vcenter}
+
+
+```{r besseya glm table}
+knitr::kable(read.csv(file.path('../data',
+  list.files(path = '../data', pattern = 'alpina_glm.*csv') ) )[,3:5]) |> 
+  kableExtra::kable_styling("striped", full_width = FALSE) |>
+  kableExtra::column_spec(1:3, width = "5em")
+```
+  
+
+
 ## ensembles pt II
 
 - several r packages offer *stacking* of many models, based on your selection 
@@ -522,11 +536,27 @@ of evaluation criteria to weigh them
 - percent suitability of habitat
 - of each cell - not proportion of cell
 - based on your model
-  
+
+<div class="notes">
+
+What does a Species Distribution Model tell us? 
+NOT where a species is located, this is governed by a combination of factors; mostly relating to dispersal, competition, and population biology. An SDM tells us where, based on the predictor variables, in combination with the data we used, is the percent probability of suitable habitat for each individual cell. 
+
+</div>
 
 ## interpretation - example {.flexbox .vcenter}
 
-![Occurence Records](../graphics/besseya_predicted.resized.png){height=100%}
+![suitability](../graphics/besseya_predicted.resized.png){height=95%}
+
+## computer limitations
+
+![](../graphics/time_spent.resized.png)
+
+<div class="notes">
+
+OK so on a closing note, and to reiterate compute power is a major limitation here, depending on the type of work which you are doing you may spend equal amounts of time computing as developing the models. As grad students you have access to Quest accounts at Northwestern which may readily deal with a task like this. The statistical portion is not really what takes up the processing time, rather it is predicting a fit model, i.e. the stacked models onto a gridded surface for mapping. 
+
+</div>
 
 ## tips and tricks
 
