@@ -45,7 +45,7 @@ ggmap(co_map) +
   theme_void() +
   labs(title = 'Occurrence records of Besseya alpina') + 
   theme(plot.title = element_text(hjust = 0.5),
-        text=element_text(size=24),)
+        text=element_text(size=24))
 dev.off()
 
 

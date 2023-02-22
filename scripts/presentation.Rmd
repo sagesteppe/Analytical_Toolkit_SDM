@@ -1,12 +1,14 @@
 ---
 title: "Species Distribution Models (SDM's)"
-subtitle: "Analytical Toolbox for Ecologists & Evolutionary Biologists (PBC 470)"
-author: "Reed Clark Benkendorf<br>Northwestern University & The Chicago Botanic Garden<br>Southwest Conservation Corps & Bureau of the Land Management"
+author: Reed Clark Benkendorf<br>Northwestern University & The Chicago Botanic Garden<br>Southwest
+  Conservation Corps & Bureau of the Land Management
 date: "February 22, '23"
 output:
   ioslides_presentation:
-    widescreen: true
+    widescreen: yes
     logo: ../graphics/cbg_logo.jpg
+  slidy_presentation: default
+subtitle: Analytical Toolbox for Ecologists & Evolutionary Biologists (PBC 470)
 bibliography: ../citations/citations.bib
 ---
 
@@ -52,10 +54,15 @@ source('functions.R')
 
 <div class="notes">
 
-Hi my name is Reed, I am a PBC masters student who is really hopefully graduating next week. I have been invited to do a guest lecture on the topic of *species distribution models*, if you have not heard of these, what they are is a hypothesis, projected onto a map, of where we might expect to find a species. Also, this tech is totally lo-fi because I am trying to graduate next week, so...!
 
 </div>
 
+
+<div class="notes">
+    Our general talk is going to follow this formula. We are basically just going to go over the really broad aspects of a model, so that if you are interested in generating one, you have something of road map for the process. 
+
+Our talk is going to have mostly, theory, with an example species which pops up here and there throughout it; but you really can't count on habitual examples here. 
+</div>
 
 ## talk overview {.flexbox .vcenter}
 
@@ -67,11 +74,6 @@ Hi my name is Reed, I am a PBC masters student who is really hopefully graduatin
 
 - interpretation
 
-<div class="notes">
-Our general talk is going to fall the revolutionary formula you see here. We are basically just going to go over the really broad aspects of a model, so that if you are interested in generating one, you have something of road map for the process. Is anyone already planning on generating any of these? 
-
-Our talk is going to have mostly, theory, with an example species which pops up here and there throughout it; but you really can't count on habitual examples here. 
-</div>
 
 ##  applications - conservation  
 
@@ -115,7 +117,7 @@ These models speak little to limitation of colonization by dispersal.
 
 They speak little to exclusion of a population due to competition
 
-They are now able to accomodate some information on obligate mutualisms.
+They are now able to accommodate some information on obligate mutualisms.
 </div>
 
 ## an example species to accompany our study
@@ -301,7 +303,7 @@ SO that is one potential issue with pseudo points!
 ## independent variables
 
 - variables relating to *patterns* in biotic distribution 
-  - relevant to *your* extent and grains 
+  - relevant to *your* domain and grains 
   - require *variation* 
   - no focus on factors governing biological *processes*, rather features which
   *correlate* with the known species distribution
@@ -382,7 +384,7 @@ As we move to fine domains, and these really are the frontier for these models, 
 
 <div class="notes">
 
-OK so more of what we have discussed already. You are compute limited, and can't be dragging along free loading variables. If you are including a variable, be sure that it is going to contribute something within the domain and at the scales which you are working with. 
+OK so more of what we have discussed already. You are compute limited, If you are including a variable, be sure that it is going to contribute something within the domain and at the scales which you are working with. 
 
 People get pretty into this, especially with all types of machine learning - which we'll discuss later, but basically try and reduce your predictors down to those which offer something. The simplest approach is just viewing the variance and seeing if you have anything low, for example that top-most bar.  The next level is comparing the values which are obtained from your presence and absence points with a t.test, no difference? why keep it. A more laborious, but more useful approach, involve creating simple models, and seeing which variables are meaningful predictors of the response using selection procedures. 
 
@@ -396,10 +398,10 @@ People get pretty into this, especially with all types of machine learning - whi
   - assumptions - independent variables (DV)
   - modelling
     - model evaluation
-  - machine learning
-    - assumptions ?
-    - modelling
-      - model evaluation
+- machine learning
+  - assumptions ?
+  - modelling
+    - model evaluation
 - ensembles pt. III
 
 ## ensembles pt I {.build}
@@ -451,7 +453,7 @@ Most forms of machine learning, utilize many 'weak learners', i.e. simple correl
 ## linear models - assumptions DV
 
 - distinct records, e.g. no duplicates of herbaria specimens    
-- one record per cell of gridded surface    
+- one record per cell of grain surface    
 
 ## linear models - assumptions IV
 
@@ -550,14 +552,10 @@ You may find like you have no time to do the tihngs you want to do being in Wint
 $$ Accuracy = \frac{\text{correct classifications}}{\text{all classifications }} $$
 
 $$ Sensitivity = \frac{\text{true positives}}{\text{true positives + false negatives }} $$ 
-<div class = font-size: 3.0em; >
 probability of the method giving a positive result when the test subject is positive.
-</div>
 
 $$ Specificity = \frac{\text{true negatives}}{\text{true negatives + false positives }} $$ 
-<div class= font-size: 3.0em; >
 probability of the method giving a negative result when the test subject is negative  
-</div>
 
 <div class="notes">
 
@@ -634,6 +632,7 @@ OK, so the cool thing about SDM's, and pretty much all spatial work, is that we 
 
 - percent suitability of habitat
 - of each cell - not proportion of cell
+- based on your data
 - based on your model
 
 <div class="notes">
@@ -702,8 +701,9 @@ dispersal?
 
 ## contact info {data-background=../graphics/collecting.jpg size=cover, .flexbox .vcenter}
 
-<div class="white"; 
-font-size: 3.0em; >
+<div class="black"; 
+font-size: 3.0em; 
+fonr-weight: 900; >
 - github/sagesteppe
 </div>
 
