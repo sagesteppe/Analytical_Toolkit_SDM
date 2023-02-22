@@ -4,8 +4,7 @@ library(tidyverse)
 library(ggmap)
 library(terra)
 
-
-setwd('/home/reed/Documents/Analytical_Toolkit_SDM/scripts')
+setwd('~/Documents/Analytical_Toolkit_SDM/scripts')
 source('functions.R')
 
 co <- c(left = -111, bottom = 34, right = -102, top = 44)
@@ -30,7 +29,7 @@ ecoregion_bound <- st_buffer(ecoregion_bound, dist = buffer_distance) %>%
   st_as_sf() 
 ecoregion_bound <- st_transform(ecoregion_bound, 3857)
 
-# import dependent variables
+# dependent variables - prediction
 
 b.alp <- st_read('../data/B.alpina_occ.shp')
 b.alp <- st_transform(b.alp, 3857)
@@ -45,7 +44,37 @@ ggmap(co_map) +
   geom_sf(data = b.alp, inherit.aes = FALSE, color = '#4E2A84', size = 2) +
   theme_void() +
   labs(title = 'Occurrence records of Besseya alpina') + 
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5),
+        text=element_text(size=24),)
+dev.off()
+
+
+# dependent variables - including absences
+
+absence <- st_sample(ecoregion_bound, size = nrow(b.alp)) %>% 
+  st_as_sf() %>% 
+  rename(geometry = 1) %>% 
+  mutate(Record = 'Absence')
+
+pa <- b.alp %>% 
+  mutate(Record  = 'Presence') %>% 
+  select(Record) %>% 
+  bind_rows(absence, .)
+
+png(filename = '../graphics/pseudo_abs.png', bg = 'transparent', width = 720, height = 720)
+ggmap(co_map) +
+  geom_sf(data = states, fill = NA, inherit.aes = FALSE, color = 'grey50') +
+  geom_sf(data = ecoregion_bound, alpha = 0.2, color = 'black', fill = NA, lwd = 2, inherit.aes = FALSE) +
+  geom_sf(data = ecoregions, fill = "darkslategray4", alpha = 0.5, inherit.aes = FALSE, color = 'darkslategray4') +
+  geom_sf_label(data = places, aes(label = NAME), inherit.aes = F,
+                alpha = 0.5, label.size  = NA) +
+  geom_sf(data = pa, inherit.aes = FALSE, aes(color = Record)) +
+  scale_color_manual(values = c("#7f1105", '#4E2A84')) +
+  theme_void() +
+  labs(title = 'records of Besseya alpina') + 
+  theme(plot.title = element_text(hjust = 0.5), 
+        text=element_text(size=24),
+        legend.position = 'bottom')
 dev.off()
 
 

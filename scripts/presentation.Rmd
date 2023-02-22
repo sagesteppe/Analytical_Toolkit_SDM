@@ -50,16 +50,28 @@ knitr::opts_chunk$set(echo = FALSE)
 source('functions.R')
 ```
 
+<div class="notes">
 
-## talk overview
+Hi my name is Reed, I am a PBC masters student who is really hopefully graduating next week. I have been invited to do a guest lecture on the topic of *species distribution models*, if you have not heard of these, what they are is a hypothesis, projected onto a map, of where we might expect to find a species. Also, this tech is totally lo-fi because I am trying to graduate next week, so...!
 
-- Applications  
+</div>
 
-- Objectives
 
-- Methods
+## talk overview {.flexbox .vcenter}
 
-- Interpretation
+- applications  
+
+- objectives
+
+- methods
+
+- interpretation
+
+<div class="notes">
+Our general talk is going to fall the revolutionary formula you see here. We are basically just going to go over the really broad aspects of a model, so that if you are interested in generating one, you have something of road map for the process. Is anyone already planning on generating any of these? 
+
+Our talk is going to have mostly, theory, with an example species which pops up here and there throughout it; but you really can't count on habitual examples here. 
+</div>
 
 ##  applications - conservation  
 
@@ -71,11 +83,19 @@ source('functions.R')
 
 - aid in modelling spread of noxious species to novel ranges (but see @liu2020species)  
 
+<div class="notes">
+Species Distribution Models, are most commonly used in the whole *Conservation* side of this whole *Plant Biology* thing - they are also popular for other kingdoms.  Essentially, these models are hypotheses of where we expect to find a species across the landscape. They are largely developed for rare species, which by definition are hard to find, and help conservation biologists in directing resources towards having success in those regards. Historically they were quite simply, to find a single rare species, but now they are oftentimes used for considering reserve design under climate change, and with some obligate mutualists, for example if anyone is familiar with Dr. Fants work regarding *Brighamia insignis* and hawkmoths that would be a use case. They are also occasionally used in invasion biology, but many caveats with this exist. 
+</div>
+
 ## applications - academic
 
 - develop candidate species for metabarcoding
 - fine scale models to study co-existence
 - used in population biology (but see @LeeYaw2022species)
+
+<div class="notes">
+These models have also gained some popularity in academic research as well, for applications aside from those we have already mentioned. For my research we utilized species distribution models to build custom sequence reference databases to identify pollen grains which were collected by bees and adhered to there bodies. They are now occasionally investigated by researchers interested in studying the co-existing of species in re-occuring assemblages. They are also used commonly in population biology, but many caveats exist with this.
+</div>
 
 ## objectives {.build}
 
@@ -87,6 +107,16 @@ but, what about dispersal?
 competition?  
 
 mutualisms?  
+
+<div class="notes">
+To reiterate, the purpose of a species distribution model is to predict a hypothesis of areas where a species may occur, given known occurrences as response, and environmental variables as predictors variables. 
+
+These models speak little to limitation of colonization by dispersal. 
+
+They speak little to exclusion of a population due to competition
+
+They are now able to accomodate some information on obligate mutualisms.
+</div>
 
 ## an example species to accompany our study
 
@@ -102,11 +132,11 @@ mutualisms?
 
 <div class="notes">
 
-As an example species, we are going to use one that i modelled as a portion of masters work. *Besseya alpina*, alpine kittentails, is a part of the Plantaginaceae and closely aligned with *Veronica*. This species is endemic to Western North America, and it is confined entirely to rocky or stony fellfields in the alpine. as would be seen 
+As an example species, we are going to use one that i modelled as a portion of masters work. *Besseya alpina*, alpine kittentails, is a part of the Plantaginaceae and closely aligned with *Veronica*. This species is endemic to Western North America, and it is confined entirely to rocky fields or stony fellfields in the alpine. as would be seen in the background of this image along the ridges. 
 
 </div>
 
-## methods - overview {.build}
+## methods - overview {.build .flexbox .vcenter}
 
 define spatial domain and grain
 
@@ -130,11 +160,11 @@ the general steps for creating species distribution models are generally pretty 
 
 ## domain and grain {.build .flexbox .vcenter}
 
-domain; spatial extent of study  
+**domain**; spatial extent of study  
   - administrative boundary   
   - ecological model 
     
-grain; scales in space and time  
+**grain**; scales in space and time  
 - resolution at which process occurs (space)    
 - current and past climate (time)    
 - projected climates    
@@ -218,7 +248,7 @@ SO you need records of plant occurrences. The unequivocally most useful, and unl
 
 ## dependent variables - presences  example {.flexbox .vcenter}
 
-![Occurence Records](../graphics/besseya_occ.png){height=100%}
+![Occurence Records](../graphics/besseya_occ.resized.png){height=100%}
 
 <div class="notes">
 
@@ -242,18 +272,31 @@ For more common species, you are able to now glean considerable amounts of infor
   - geographic
   - environmental
   
-  ![correlated!](../graphics/AIM.resized.png)
-
+  ![](../graphics/AIM.resized.png)
+  ![](../graphics/FIA.resized.png)
 </div>
   
-```{r}
-knitr::include_graphics('../graphics/FIA.png')
-```
 
+<div class="notes">
+
+OK so pseudo-absences, and especially pseudo-absences, are not required for creating species distribution models. In my experience I feel like 2/3 of people do not use them, and a 1/3 do. Basically, these will go into the model building processing as areas of habitat which are known to be unsuitable to the focal species; for whatever reason. 
+
+If you want to use these, you are able to get a large number of them from standardized vegetation protocols which contain species richness meaders across a specific area. As you are likely to try and acquire these data, as they are more regularly occurring, and capture enormous geographic and environmental diversity, you can throw them in and see what happens. Some rules of thumb exist for using them, but they don't seem that wonderful. We cite a paper here which calls for 10k absence records, but this seems to swamp the link functions in most models (I. Breckheimer).
+
+</div>
 
 ## dependent variables - absences example {.flexbox .vcenter}
 
-**just create some random red points and add em to the map above.** 
+
+![](../graphics/pseudo_abs.resized.png)
+<div class="notes">
+
+Here we have generated an equal number of pseudo-absences, as there are occurrence records. As you can see many of the records are in places well outside the range of the species. But what we also see are a number of records which are in places where I would wager the species is, if we look just to the LEFT of the 'Grand Junction' label we see we have some points in the and Elk Mountains, which are almost certainly suitable habitat, Likewise we have some scatted points around the UPPER LEFT corner for Durango in the San Juan Mountains which are probably also suitable habitat. 
+
+SO that is one potential issue with pseudo points!
+
+</div>
+
 
 ## independent variables
 
@@ -274,18 +317,18 @@ These variables need to reflect processes which vary in both your domain, and wi
   
 ## independent variables - examples {.build .flexbox .vcenter}
 
-domain: continental (e.g. North America)    
+domain: **continental** (e.g. North America)    
     - maximum and minimum daily temperatures [monthly, 4km]  
     - precipitation  [monthly, 4km]  
     - hydrologic drainage [millenial, 4km]  
   
-domain: regional (e.g. Southern Rockies)    
+domain: **regional** (e.g. Southern Rockies)    
     - elevation  [millenial, 1km]  
     - soil classes  [millenial, 1km]  
     - solar radiation [millenial, 1km]  
     - precipitation form [monthly, 1km]  
   
-domain: fine (e.g. McDonald Woods)    
+domain: **fine** (e.g. McDonald Woods)    
     - micro topography   [decade, 1m]  
     - water relations  [decade, 1m]  
     - shade  [weekly, 1m]  
@@ -372,10 +415,15 @@ solution:
   - run many models, synthesize the results    
   
 <br>
-<br>
 <div class="centered">
 > *"we are stronger together than we are alone"* - Walter Payton
+
 </div>
+
+<div class="notes">
+There is a set of statistical procedures for combining, the predictions from models, based on how accurate each one is. whereby the weaknesses of the models are ameliorated, and their strengths strengthened. We call this ensembling, and it is very important in machine learning. ML, is not a human brain and they can become fixated on data which we would all recognize as bogus. S  
+</div>
+
 
 ## ensembles pt II  {.build }
 
@@ -387,8 +435,12 @@ bootstrap aggregation (**bagging**) e.g. *random forests*
 **boosting** e.g. *boosted regression trees*    
   - many models run sequentially, focusing on correcting errors in the last iteration
       
-*stacking*   
+**stacking**  
    - can accommodate the consensus output from bagged, boosted, or traditional linear models
+   
+<div class="notes">
+Most forms of machine learning, utilize many 'weak learners', i.e. simple correlations, which when bound together offer great insight. 
+</div>
   
 ## linear models
 
@@ -420,6 +472,10 @@ So, I'm sure as you all have seen environmental predictors are generally highly 
 ## modelling process {.flexbox .vcenter}
 
 all evaluation performed by computer -- too much information
+
+<div class="notes">
+You can specify which criteria, and how to weigh them, and the algorithms will work within these confines, but their are too many decisions for a human to keep up with. 
+</div>
 
 ## machine learning 
 
@@ -493,11 +549,35 @@ You may find like you have no time to do the tihngs you want to do being in Wint
 
 $$ Accuracy = \frac{\text{correct classifications}}{\text{all classifications }} $$
 
-$$ Sensitivity = \frac{\text{true positives}}{\text{true positives + false negatives }} $$ probability of the method giving a positive result when the test subject is positive.
+$$ Sensitivity = \frac{\text{true positives}}{\text{true positives + false negatives }} $$ 
+<div class = font-size: 3.0em; >
+probability of the method giving a positive result when the test subject is positive.
+</div>
 
+$$ Specificity = \frac{\text{true negatives}}{\text{true negatives + false positives }} $$ 
+<div class= font-size: 3.0em; >
+probability of the method giving a negative result when the test subject is negative  
+</div>
 
-$$ Specificity = \frac{\text{true negatives}}{\text{true negatives + false positives }} $$ probability of the method giving a negative result when the test subject is negative  
+<div class="notes">
 
+There are many forms of evaluation for species distribution models. We will only discuss three simple evaluation criteria. First off bear in mind, all we can evaluate of a model, is how well it performs on the splits in our data, these models are unable to be held to the same standard in the field that they perform at on a computer. SO
+
+**Accuracy**, is essentially very simple, how often are you correct? If we were to have 200 data points, and use 100 for training and 100 for testing, how often would our model be able to predict the presences of the withheld points? How accurate do we want to be? Better than 50%, right? That's chance. Generally models with over 70% accuracy are considered useful. There are two major subsets of Accuracy, which oftentimes go by different names, but we will only refer to them as Sensitivity and Specificity here.
+
+**Sensitivity** is how often we are able to identify a presence, if we had a model which identified every single presence in the test data it would have a sensitivity of 100%. 
+
+**Specificity** is how often we are able to identify an absence, if we had a model which identified every single absence in the test data it would have a specifity of 100%. 
+
+SO... it is not hard to imagine, that a model may cheat, and become very well at finding presences; maybe by just classifying every cell as a presence!! So that is why it is good to consider both sensitivity and specificity together under the umbrella of accuracy. 
+
+Can you think of any scenarios where we could want a model that is able to predict only suitable habitat really well? i.e. where we lean into *sensitivity* ?
+
+Can you think of any scenarios where we could want a model that is able to predict unsuitable habitat really well? I.e. where we lean into *Specificity*?
+
+Say we need to make a road or a trail through a natural area, we would want to be sure the species CANNOT be there, rather than know everywhere it is
+
+</div>
 
 ## evaluation III
 
@@ -505,6 +585,10 @@ $$ Specificity = \frac{\text{true negatives}}{\text{true negatives + false posit
 - True Skill Statistic (TSS)  
   - unequal sample sizes, i.e. evaluate many models at once  
 - Cohen's kappa
+
+<div class="notes">
+These are some more forms of model evaluation you can look into on your own time if this topic interests you. They all run from 0-100, wherein 50 is over chance, and generally 70% constitutes a good model.
+</div>
 
 ## evaluation IV - example {.flexbox .vcenter}
 
@@ -515,14 +599,24 @@ knitr::kable(read.csv(file.path('../data',
   kableExtra::kable_styling("striped", full_width = FALSE) |>
   kableExtra::column_spec(1:3, width = "5em")
 ```
-  
 
+
+<div class="notes">
+Okay, so here are the real evaluation data for our Besseya model, we fit three different GLM's. Did we do OKAY?
+
+Yes we did, in fact too well... what are we going to do now... 
+</div>
+  
 
 ## ensembles pt II
 
-- several r packages offer *stacking* of many models, based on your selection 
+- several r packages offer *stacking* of many (strong) models, based on your selection 
 of evaluation criteria to weigh them
 - the 'test' partition of your data are used to evaluate this final model
+
+<div class="notes">
+We can actually combine models, I am not sure of the details but more or less we create a super model, from our choice models. This is a form of stacking, remember this type of ensemble is stacking because we now have strong models.
+</div>
 
 ## predicting a model into space 
 
@@ -530,6 +624,11 @@ of evaluation criteria to weigh them
 - each covariate in the model, is generally a single raster layer
 - r packages, such as *terra*, do all the work for you
 - accordingly, species distribution models create a map as a product
+
+<div class="notes">
+OK, so the cool thing about SDM's, and pretty much all spatial work, is that we predict them back into space! Because we have gridded surfaces composed of our covariates, we are able to predict the likelihood of suitable habitat onto a single raster, which we can visualize as a map. 
+</div>
+
 
 ## interpretation 
 
@@ -571,6 +670,10 @@ OK so on a closing note, and to reiterate compute power is a major limitation he
 - dynamic programming; import/export data
 
 - track code on github  
+
+<div class="notes">
+It is easy to get swept away with how enormously fun model building is in R, so you gotta keep your eyes on the prize, or YOU could be the next 4th year masters student guest lecturing about machine learning. 
+</div>
 
 ## objectives - recapped {.build}
 
