@@ -9,3 +9,5 @@ It contains four main directories, two Rscripts, and one Rmarkdown file document
 
 Note that only options 1 & 2 will allow you to 're-create' the slide show. If you use option 3, you can knit this to PDF in a round about way to print note, but you will need to remove the paths to images, each of which is preceded by '!'
 
+The presentation may be viewed online at [rpubs](https://rpubs.com/steppe27/1006352)
+
