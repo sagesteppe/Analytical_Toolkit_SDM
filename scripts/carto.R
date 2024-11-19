@@ -21,13 +21,55 @@ ecoregions <- sf::read_sf("../data/us_eco_l4/us_eco_l4_no_st.shp")
 ecoregions <- st_transform(ecoregions, 3857)
 states <- st_transform(states, 3857)
 
-
 buffer_distance <- units::as_units(50, "kilometers") # want to buffer the edges...
 ecoregion_bound <- st_convex_hull(ecoregions)
 ecoregion_bound <- st_buffer(ecoregion_bound, dist = buffer_distance) %>% 
   st_transform(5070) %>% 
   st_as_sf() 
 ecoregion_bound <- st_transform(ecoregion_bound, 3857)
+
+
+##### 100 Kilometer search ###########
+
+goth <- data.frame(var = 'gothic', y = 38.958, x = -106.987) %>% 
+  st_as_sf(coords = c('x', 'y'), crs = 4326) %>% 
+  st_transform(26912)
+
+km25 <- goth %>% 
+  st_buffer(25000) %>% 
+  st_transform(3857) %>% 
+  st_as_sf()
+km50 <- goth %>% 
+  st_buffer(50000) %>% 
+  st_transform(3857)
+km100 <- goth %>% 
+  st_buffer(100000) %>% 
+  st_transform(3857)
+
+places_d <- filter(places, NAME != 'Grand Junction')
+
+png(filename = '../graphics/distance_queried.png', bg = 'transparent', width = 720, height = 720)
+ggmap(co_map) +
+  geom_sf(data = states, fill = NA, inherit.aes = FALSE, color = 'grey50') +
+  geom_sf(data = ecoregion_bound, alpha = 0.2, color = 'black', fill = NA, lwd = 2, inherit.aes = FALSE) +
+  geom_sf(data = ecoregions, fill = "darkslategray4", 
+          alpha = 0.5, inherit.aes = FALSE, color = 'darkslategray4') +
+  geom_sf_label(data = places_d, aes(label = NAME), inherit.aes = F,
+                alpha = 0.5, label.size  = NA) +
+  
+  geom_sf(data = km100, inherit.aes = F, alpha = 0.5, fill = '#ffc8dd', color = 'black') +
+  geom_sf(data = km50, inherit.aes = F, fill = NA, color = 'black') +
+  geom_sf(data = km25, inherit.aes = F, fill = NA, color = 'black') +
+  
+  theme_void() +
+  labs(title = 'Distance Searched') + 
+  theme(plot.title = element_text(hjust = 0.5),
+        text=element_text(size=24))
+dev.off()
+
+## time search L4
+
+
 
 # dependent variables - prediction
 
