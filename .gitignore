@@ -1,2 +1,4 @@
 *.tif
 us_eco_l4.*
+
+/.quarto/
